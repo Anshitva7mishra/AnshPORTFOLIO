@@ -65,9 +65,7 @@ export default function TelemetryDesk({ repoCount = 80 }) {
       let parsedEvents = [];
       try {
         const cacheBuster = new Date().getTime();
-        const response = await fetch(`https://api.github.com/users/Anshitva7mishra/events?per_page=10&t=${cacheBuster}`, {
-          headers: { 'Cache-Control': 'no-cache' }
-        });
+        const response = await fetch(`https://api.github.com/users/Anshitva7mishra/events?per_page=10&t=${cacheBuster}`);
         
         if (response.ok) {
           const data = await response.json();
