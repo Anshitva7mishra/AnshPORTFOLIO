@@ -11,7 +11,7 @@ Welcome to **The Daily Deployment**, a newspaper-style portfolio documenting my 
 
 ### Live Dispatches
 You can view the live interactive portfolio here:
-[https://anshitva7mishra.github.io/AnshPORTFOLIO/](https://anshitva7mishra.github.io/AnshPORTFOLIO/)
+[https://ansh-portfolio-two-flax.vercel.app/](https://ansh-portfolio-two-flax.vercel.app/)
 
 ### Contact & Connect
 - **LinkedIn:** [Anshitva Mishra](https://www.linkedin.com/in/anshitva-mishra-1099392a7/)
