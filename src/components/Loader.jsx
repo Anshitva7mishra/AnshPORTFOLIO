@@ -36,6 +36,15 @@ export default function Loader({ onComplete }) {
     return () => clearInterval(timer);
   }, [onComplete]);
 
+  // Prevent scrolling when the loader is active
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   // Generate newspaper-style progress bar indicator: ■■■■■■□□□□
   const filledBlocks = Math.min(Math.floor(progress / 10), 10);
   const emptyBlocks = 10 - filledBlocks;
