@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anshitva7mishra.github.io/AnshPORTFOLIO/sitemap.xml

@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Dancing+Script:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  body {
+    background-color: #F5F0E6; /* paper */
+    color: #111111; /* ink */
+    font-family: 'Libre Baskerville', Garamond, serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+}
+
+/* Custom styling for broadsheet print elements */
+.section-divider-thin {
+  height: 1px;
+  background-color: #C8BDAA; /* border-custom */
+  margin: 15px 0;
+}
+
+.section-divider-heavy {
+  height: 4px;
+  background-color: #111111; /* ink */
+  margin: 20px 0;
+}
+
+.section-divider-double {
+  border-top: 3px double #C8BDAA;
+  margin: 15px 0;
+  height: 0;
+}
+
+/* Drop Cap rules */
+.drop-cap::first-letter {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3.5rem;
+  float: left;
+  line-height: 0.8;
+  padding-right: 8px;
+  padding-top: 4px;
+  color: #111111;
+  font-weight: 900;
+}
+
+/* Custom scrollbar to resemble a printed page edge */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #C8BDAA;
+}
+
+/* Ticker scroll animation */
+@keyframes ticker-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+.ticker-scroll-animate {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker-scroll 40s linear infinite;
+}
+
+/* Newspaper Column Grid styling */
+.newspaper-cols-2 {
+  column-count: 2;
+  column-gap: 24px;
+  text-align: justify;
+}
+
+.newspaper-cols-3 {
+  column-count: 3;
+  column-gap: 24px;
+  text-align: justify;
+}
+
+@media (max-width: 1024px) {
+  .newspaper-cols-2, .newspaper-cols-3 {
+    column-count: 1;
+  }
+}

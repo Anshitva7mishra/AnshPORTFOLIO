@@ -1,0 +1,15 @@
+{
+  "short_name": "DailyDeployment",
+  "name": "Anshitva Mishra | The Daily Deployment",
+  "icons": [
+    {
+      "src": "social_share.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#B94A32",
+  "background_color": "#F5F0E6"
+}

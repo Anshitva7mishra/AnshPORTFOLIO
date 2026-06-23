@@ -1,0 +1,39 @@
+{
+  "socialPosts": [
+    {
+      "desk": "LinkedIn Desk",
+      "text": "[Post] \"Privacy is often treated as a feature, not a foundation. Norexo is built around a simple belief: Every voice deserves to be heard safely.\" — Norexo launches anonymous community dispatches.",
+      "confidence": "Irrefutable"
+    },
+    {
+      "desk": "LinkedIn Desk",
+      "text": "[Post] \"Building JVMHub for Java developers using JavaScript MERN stack. A platform for JVM engineers, powered by node/react.\" — JVMHub concepts released.",
+      "confidence": "Irrefutable"
+    },
+    {
+      "desk": "LinkedIn Desk",
+      "text": "[Post] \"bcrypt silently discards anything past 72 characters, no warning. Kavach-KDF resolves this limitation and defaults to Argon2id.\" — security dispatches.",
+      "confidence": "High"
+    },
+    {
+      "desk": "X/Twitter Desk",
+      "text": "[Tweet] \"First-principles backend engineering means writing raw socket connections. No shortcuts. #BuildInPublic @AnshitvaM\"",
+      "confidence": "High"
+    },
+    {
+      "desk": "X/Twitter Desk",
+      "text": "[Tweet] \"80 repositories tracked. A serial builder can't leave default configurations alone.\"",
+      "confidence": "Immediate"
+    },
+    {
+      "desk": "X/Twitter Desk",
+      "text": "[Tweet] \"Mathura reports: Coffee index volatile (+12.4%), sleep index critical (-45.2%).\"",
+      "confidence": "High"
+    },
+    {
+      "desk": "X/Twitter Desk",
+      "text": "[Tweet] \"31 modules of raw backend. Zero libraries. Hostel Chronicles is live.\"",
+      "confidence": "Critical"
+    }
+  ]
+}
