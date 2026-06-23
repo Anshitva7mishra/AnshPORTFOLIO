@@ -47,11 +47,11 @@ export default function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
         transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto p-0 sm:p-3 md:p-6 bg-paper text-ink selection:bg-accent selection:text-paper overflow-x-hidden w-full"
+        className="max-w-7xl mx-auto p-0 sm:p-3 md:p-6 bg-paper text-ink selection:bg-accent selection:text-paper w-full"
       >
-        <div className="border border-border-custom p-1 sm:p-3 md:p-4 bg-paper relative shadow-sm overflow-x-hidden">
+        <div className="border border-border-custom p-1 sm:p-3 md:p-4 bg-paper relative shadow-sm">
           {/* Broadsheet Border Frame */}
-          <div className="border-4 border-ink p-1.5 sm:p-4 md:p-6 overflow-x-hidden">
+          <div className="border-4 border-ink p-1.5 sm:p-4 md:p-6">
             <Masthead repoCount={repoCount} />
             <Navigation />
             <Ticker />

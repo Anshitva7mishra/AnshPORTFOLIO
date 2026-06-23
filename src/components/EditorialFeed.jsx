@@ -162,13 +162,9 @@ export default function EditorialFeed() {
           <div className="border border-ink p-1 bg-paper mb-6">
             <div className="w-full overflow-hidden border border-border-custom/50 flex items-center justify-center bg-ink/5">
               <img 
-                src={`${import.meta.env.BASE_URL}assets/webapp_banner.png`} 
+                src={`${import.meta.env.BASE_URL}assets/developer_working.png`} 
                 alt="Photographic reconstruction of the subject's environment" 
-                className="w-full h-auto grayscale opacity-90 mix-blend-multiply border-b border-border-custom mb-3"
-                onError={(e) => {
-                  // Fallback to developer_working.png if they haven't added the screenshot yet
-                  e.target.src = `${import.meta.env.BASE_URL}assets/developer_working.png`;
-                }}
+                className="w-full h-auto object-contain filter grayscale contrast-125 brightness-95" 
               />
             </div>
             <div className="font-mono text-[10px] text-gray-600 border-t border-border-custom/30 pt-1.5 px-1 mt-1">
