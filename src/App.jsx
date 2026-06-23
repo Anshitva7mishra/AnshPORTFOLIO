@@ -13,6 +13,7 @@ import TipLine from './components/TipLine';
 import PressSupportFund from './components/PressSupportFund';
 import PressBureau from './components/PressBureau';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,6 +70,7 @@ export default function App() {
           </div>
         </div>
       </motion.div>
+      <ScrollToTop />
     </>
   );
 }

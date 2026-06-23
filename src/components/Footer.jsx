@@ -19,12 +19,15 @@ export default function Footer({ repoCount = 80 }) {
         <div className="flex flex-col justify-center border-t md:border-t-0 lg:border-l border-border-custom/50 pt-4 md:pt-0 lg:pl-6">
           <div className="text-gray-500 text-[10px] tracking-widest">EDITOR-IN-CHIEF</div>
           <div 
-            className="text-4xl text-ink mt-2 tracking-tighter font-normal opacity-80 transform -rotate-3 select-none" 
+            className="text-4xl text-ink mt-2 tracking-tighter font-normal opacity-80 transform -rotate-3 select-none normal-case" 
             style={{ fontFamily: "'Caveat', 'Dancing Script', 'Brush Script MT', 'Lucida Handwriting', 'Bradley Hand', cursive" }}
           >
-            anshitva
+            Anshitva
           </div>
-          <div className="text-[9px] text-gray-600 font-semibold">B.TECH CSE • 4TH YEAR STUDENT</div>
+          <div className="text-[10px] text-ink/70 font-mono tracking-widest mt-1 mb-1 normal-case">
+            23-06-2026
+          </div>
+          <div className="text-[9px] text-gray-600 font-semibold uppercase">B.TECH CSE • 4TH YEAR STUDENT</div>
         </div>
 
         {/* Col 3: Channels */}

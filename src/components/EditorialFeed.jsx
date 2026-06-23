@@ -168,7 +168,7 @@ export default function EditorialFeed() {
               />
             </div>
             <div className="font-mono text-[10px] text-gray-600 border-t border-border-custom/30 pt-1.5 px-1 mt-1">
-              Fig 1: Photographic evidence showing elevated caffeine presence, dual-monitors displaying telemetry, and a mechanical keyboard.
+              Fig 1: Artist's rendition showing elevated caffeine presence, a single laptop display, and late-night debugging efforts.
             </div>
           </div>
 
