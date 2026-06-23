@@ -46,90 +46,80 @@ export default function TelemetryDesk({ repoCount = 80 }) {
     ];
 
     const fetchGithubEvents = async () => {
+      let activeSocialPosts = [...staticSocialPosts];
       try {
-        let activeSocialPosts = [...staticSocialPosts];
-        try {
-          const postsRes = await fetch(`${import.meta.env.BASE_URL}posts.json`);
-          if (postsRes.ok) {
-            const postsData = await postsRes.json();
-            if (postsData.socialPosts && postsData.socialPosts.length > 0) {
-              activeSocialPosts = postsData.socialPosts;
-            }
+        const cacheBuster = new Date().getTime();
+        const postsRes = await fetch(`${import.meta.env.BASE_URL}posts.json?t=${cacheBuster}`, {
+          cache: 'no-store'
+        });
+        if (postsRes.ok) {
+          const postsData = await postsRes.json();
+          if (postsData.socialPosts && postsData.socialPosts.length > 0) {
+            activeSocialPosts = postsData.socialPosts;
           }
-        } catch (postErr) {
-          console.warn("Could not load public/posts.json, using built-in posts fallback:", postErr);
         }
+      } catch (postErr) {
+        console.warn("Could not load public/posts.json, using built-in posts fallback:", postErr);
+      }
 
-        const response = await fetch("https://api.github.com/users/Anshitva7mishra/events");
-        if (!response.ok) throw new Error("GitHub API error");
-        const data = await response.json();
+      let parsedEvents = [];
+      try {
+        const cacheBuster = new Date().getTime();
+        const response = await fetch(`https://api.github.com/users/Anshitva7mishra/events?per_page=10&t=${cacheBuster}`, {
+          headers: { 'Cache-Control': 'no-cache' }
+        });
         
-        const parsedEvents = data
-          .map(event => {
-            const time = new Date(event.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const dateStr = `LIVE — ${time}`;
-            const repoName = event.repo.name.replace("Anshitva7mishra/", "");
-            
-            if (event.type === "PushEvent" && event.payload.commits && event.payload.commits.length > 0) {
-              const commitMsg = event.payload.commits[0].message;
+        if (response.ok) {
+          const data = await response.json();
+          parsedEvents = data
+            .map(event => {
+              const time = new Date(event.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+              const dateStr = `LIVE — ${time}`;
+              const repoName = event.repo.name.replace("Anshitva7mishra/", "");
               
-              return {
-                date: dateStr,
-                desk: "Engineering Desk",
-                text: `[Commit] ${repoName}: ${commitMsg}`,
-                confidence: "Immediate"
-              };
-            } else if (event.type === "CreateEvent") {
-              const refType = event.payload.ref_type || "repository";
-              return {
-                date: dateStr,
-                desk: "Research Desk",
-                text: `[Event] Created ${refType} in ${repoName}`,
-                confidence: "High"
-              };
-            } else if (event.type === "WatchEvent") {
-              return {
-                date: dateStr,
-                desk: "Community Desk",
-                text: `[Event] Starred repository ${repoName}`,
-                confidence: "Medium"
-              };
-            } else if (event.type === "ForkEvent") {
-              return {
-                date: dateStr,
-                desk: "Engineering Desk",
-                text: `[Event] Forked repository ${repoName}`,
-                confidence: "High"
-              };
-            }
-            return null;
-          })
-          .filter(Boolean);
-
-        if (parsedEvents.length > 0) {
-          const mergedLogs = [];
-          let eventIndex = 0;
-          let socialIndex = 0;
-          
-          while (mergedLogs.length < 8) {
-            if (eventIndex < parsedEvents.length && (mergedLogs.length % 3 !== 2 || socialIndex >= activeSocialPosts.length)) {
-              mergedLogs.push(parsedEvents[eventIndex]);
-              eventIndex++;
-            } else if (socialIndex < activeSocialPosts.length) {
-              const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-              mergedLogs.push({
-                ...activeSocialPosts[socialIndex],
-                date: `LIVE — ${time}`
-              });
-              socialIndex++;
-            } else {
-              break;
-            }
-          }
-          setWireLogs(mergedLogs.slice(0, 4));
+              if (event.type === "PushEvent" && event.payload.commits && event.payload.commits.length > 0) {
+                const commitMsg = event.payload.commits[0].message;
+                return { date: dateStr, desk: "Engineering Desk", text: `[Commit] ${repoName}: ${commitMsg}`, confidence: "Immediate" };
+              } else if (event.type === "CreateEvent") {
+                const refType = event.payload.ref_type || "repository";
+                return { date: dateStr, desk: "Research Desk", text: `[Event] Created ${refType} in ${repoName}`, confidence: "High" };
+              } else if (event.type === "WatchEvent") {
+                return { date: dateStr, desk: "Community Desk", text: `[Event] Starred repository ${repoName}`, confidence: "Medium" };
+              } else if (event.type === "ForkEvent") {
+                return { date: dateStr, desk: "Engineering Desk", text: `[Event] Forked repository ${repoName}`, confidence: "High" };
+              }
+              return null;
+            })
+            .filter(Boolean);
+        } else {
+          console.warn("GitHub API rate limit exceeded. Commits will not update until limit resets.");
         }
-      } catch (err) {
-        console.warn("GitHub API rate limit or error, using fallback dispatches.", err);
+      } catch (githubErr) {
+        console.warn("GitHub API error:", githubErr);
+      }
+
+      const mergedLogs = [];
+      let eventIndex = 0;
+      let socialIndex = 0;
+      
+      while (mergedLogs.length < 8) {
+        if (eventIndex < parsedEvents.length && (mergedLogs.length % 3 !== 2 || socialIndex >= activeSocialPosts.length)) {
+          mergedLogs.push(parsedEvents[eventIndex]);
+          eventIndex++;
+        } else if (socialIndex < activeSocialPosts.length) {
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          mergedLogs.push({
+            ...activeSocialPosts[socialIndex],
+            date: `LIVE — ${time}`
+          });
+          socialIndex++;
+        } else {
+          break;
+        }
+      }
+
+      if (mergedLogs.length > 0) {
+        setWireLogs(mergedLogs.slice(0, 4));
       }
     };
 
@@ -269,7 +259,7 @@ export default function TelemetryDesk({ repoCount = 80 }) {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="flex flex-col border-t lg:border-t-0 border-border-custom pt-6 lg:pt-0 lg:pl-6 justify-between"
+        className="flex flex-col border-t lg:border-t-0 border-border-custom pt-6 lg:pt-0 lg:pl-6 gap-6"
       >
         <div>
           <div className="border-b border-border-custom pb-1 mb-2">
@@ -339,6 +329,24 @@ export default function TelemetryDesk({ repoCount = 80 }) {
               </tbody>
             </table>
           )}
+        </div>
+
+        {/* CLASSIFIED ADVERTISEMENT BLOCK TO FILL SPACE */}
+        <div className="border-2 border-ink p-4 relative bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] mt-2 hover:bg-ink/5 transition-colors duration-300">
+          <div className="absolute -top-2.5 left-4 bg-paper px-2 font-mono text-[8px] font-bold tracking-widest text-ink">
+            CLASSIFIED AD
+          </div>
+          <h4 className="font-headline font-black text-lg text-center uppercase leading-tight mb-2 tracking-tight">
+            WANTED: <br/> <span className="text-accent">HARD ENGINEERING PROBLEMS</span>
+          </h4>
+          <p className="font-body text-[10px] text-center leading-relaxed mb-3 text-ink/80">
+            Local software engineer actively seeking high-impact, deeply technical backend & frontend challenges. Proficiency in MERN stack, Java ecosystems, and resolving chaotic production fires. 
+          </p>
+          <div className="text-center mt-4 mb-2">
+            <a href="#tip-line" className="font-mono text-[9px] font-bold text-paper bg-ink hover:bg-accent px-4 py-2 uppercase transition-colors">
+              Dispatch a Telegram
+            </a>
+          </div>
         </div>
 
         {/* WEATHER REPORT added as original content to fill the right column empty space */}

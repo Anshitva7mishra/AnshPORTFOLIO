@@ -15,6 +15,14 @@ export default function TipLine() {
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState(null); // 'success' | 'error' | null
 
+  // Validation logic
+  const missingName = Math.max(0, 2 - formData.sourceName.trim().length);
+  const missingEmail = Math.max(0, 5 - formData.returnAddress.trim().length) || (!formData.returnAddress.includes('@') ? 1 : 0);
+  const missingHeadline = Math.max(0, 5 - formData.tipHeadline.trim().length);
+  const missingBody = Math.max(0, 20 - formData.fullReport.trim().length);
+
+  const isFormValid = missingName === 0 && missingEmail === 0 && missingHeadline === 0 && missingBody === 0;
+
   // Read environment variables for EmailJS (with safe fallbacks)
   const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
   const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
@@ -139,14 +147,13 @@ export default function TipLine() {
             Submit tips directly to the editor's desk. For custom contracts, code auditing inquiries, or system deployment requests, dispatch your transmission below.
           </p>
 
-          {/* SUCCESS / ERROR BULLETINS (Removed to rely on global NotificationContext toasts) */}
-
           <form onSubmit={handleSubmit} className="font-mono text-xs space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="sourceName" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                  <span className="text-accent">I.</span> FROM (SOURCE NAME)
+                <label htmlFor="sourceName" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center justify-between w-full">
+                  <span className="flex items-center gap-1.5"><span className="text-accent">I.</span> FROM (SOURCE NAME)</span>
+                  {missingName > 0 && <span className="text-[9px] text-accent font-normal normal-case opacity-75">({missingName} char required)</span>}
                 </label>
                 <input 
                   type="text" 
@@ -161,8 +168,9 @@ export default function TipLine() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="returnAddress" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                  <span className="text-accent">II.</span> REPLY WIRE (EMAIL)
+                <label htmlFor="returnAddress" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center justify-between w-full">
+                  <span className="flex items-center gap-1.5"><span className="text-accent">II.</span> REPLY WIRE (EMAIL)</span>
+                  {missingEmail > 0 && <span className="text-[9px] text-accent font-normal normal-case opacity-75">{!formData.returnAddress.includes('@') ? '(Valid email required)' : `(${missingEmail} char required)`}</span>}
                 </label>
                 <input 
                   type="email" 
@@ -179,8 +187,9 @@ export default function TipLine() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="tipHeadline" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                <span className="text-accent">III.</span> DISPATCH HEADLINE
+              <label htmlFor="tipHeadline" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center justify-between w-full">
+                <span className="flex items-center gap-1.5"><span className="text-accent">III.</span> DISPATCH HEADLINE</span>
+                {missingHeadline > 0 && <span className="text-[9px] text-accent font-normal normal-case opacity-75">({missingHeadline} char required)</span>}
               </label>
               <input 
                 type="text" 
@@ -195,8 +204,9 @@ export default function TipLine() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fullReport" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-                <span className="text-accent">IV.</span> TRANSMISSION DETAILS (BODY)
+              <label htmlFor="fullReport" className="font-bold text-ink uppercase tracking-wider text-[10px] flex items-center justify-between w-full">
+                <span className="flex items-center gap-1.5"><span className="text-accent">IV.</span> TRANSMISSION DETAILS (BODY)</span>
+                {missingBody > 0 && <span className="text-[9px] text-accent font-normal normal-case opacity-75">({missingBody} char required)</span>}
               </label>
               <textarea 
                 id="fullReport" 
@@ -216,10 +226,12 @@ export default function TipLine() {
               </span>
               <button 
                 type="submit" 
-                disabled={isSending}
+                disabled={isSending || !isFormValid}
                 className="w-full sm:w-auto shrink-0 bg-ink text-paper border border-ink py-3 px-6 uppercase font-bold tracking-widest hover:bg-accent hover:border-accent hover:text-paper transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-[10px] whitespace-nowrap"
               >
-                {isSending ? 'SENDING TELEGRAM...' : 'DISPATCH MESSAGE ➔'}
+                {isSending 
+                  ? 'SENDING TELEGRAM...' 
+                  : (!isFormValid ? 'INCOMPLETE DETAILS' : 'DISPATCH MESSAGE ➔')}
               </button>
             </div>
 
